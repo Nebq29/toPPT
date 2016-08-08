@@ -1067,7 +1067,24 @@ function myArg = getValuesFromArgument(myArg,arguments,out)
         end
         %%%
         
+        %%% Position in Percentage only applies if pos% is NOT a string!
+        %%% e.g. pos% = [10,10] in %
+        structMyArgument = deleteFromArgumentAndGetValue(arguments,'col%');
+        if ~isempty(structMyArgument.value)
+            myArg.stringCol            = structMyArgument.value;
+            myArg.colPercentageByUser  = 1;
+            myArg.doColumnShape        = 1;
+            arguments                  = structMyArgument.arguments;
+        end
+        %%%
         
+        %%% defines cells to an array of 2x2 
+        structMyArgument = deleteFromArgumentAndGetValue(arguments,'merge');
+        if ~isempty(structMyArgument.value)
+            myArg.userMergeCells       = structMyArgument.value;
+            myArg.doMergCells          = 1;
+            arguments                  = structMyArgument.arguments;
+        end
         %%%
         
         %%% elementAnker only applies if pos is NOT a string! e.g. pos = [200,200]
@@ -1183,7 +1200,7 @@ function myArg = getValuesFromArgument(myArg,arguments,out)
             arguments              = structMyArgument.arguments;
         end
         %%%
-        
+
 
     end
     
@@ -1313,6 +1330,25 @@ function myArg = getValuesFromArgument(myArg,arguments,out)
         end
         %%%
         
+        %%% Column in Percentage only applies if col% is NOT a string!
+        %%% e.g. col% = [10,10] in %
+        structMyArgument = deleteFromArgumentAndGetValue(arguments,'col%');
+        if ~isempty(structMyArgument.value)
+            myArg.stringCol            = structMyArgument.value;
+            myArg.colPercentageByUser  = 1;
+            myArg.doColumnShape        = 1;
+            arguments                  = structMyArgument.arguments;
+        end
+        
+        %%% defines cells to an array of 2x2 
+        structMyArgument = deleteFromArgumentAndGetValue(arguments,'merge');
+        if ~isempty(structMyArgument.value)
+            myArg.userMergeCells       = structMyArgument.value;
+            myArg.doMergCells          = 1;
+            arguments                  = structMyArgument.arguments;
+        end
+        %%%
+        
         %%% elementAnker only applies if pos is NOT a string! e.g. pos = [200,200]
         structMyArgument = deleteFromArgumentAndGetValue(arguments,'posAnker');
         if ~isempty(structMyArgument.value)
@@ -1395,7 +1431,7 @@ function myArg = getValuesFromArgument(myArg,arguments,out)
         end
         %%%
 
-        %%% Width% %%%
+        %%% Height% %%%
         structMyArgument       = deleteFromArgumentAndGetValue(arguments,'Height%');
         if ~isempty(structMyArgument.value)
             myArg.defaultheightPercentage = structMyArgument.value;
@@ -1447,6 +1483,7 @@ function myArg = getValuesFromArgument(myArg,arguments,out)
         if ~isempty(structMyArgument.value)
             myArg.addBulletNumbers       = structMyArgument.value;
             arguments              = structMyArgument.arguments;
+            myArg.setIndentLevel         = 0;
         end
         %%%
 
@@ -1454,7 +1491,24 @@ function myArg = getValuesFromArgument(myArg,arguments,out)
         structMyArgument       = deleteFromArgumentAndGetValue(arguments,'setBullets');
         if ~isempty(structMyArgument.value)
             myArg.addBulletPoints        = structMyArgument.value;
+            myArg.setIndentLevel         = 0;
             arguments              = structMyArgument.arguments;
+        end
+        
+        %%% setBulletIndent %%%
+        structMyArgument       = deleteFromArgumentAndGetValue(arguments,'bulletIndent');
+        if ~isempty(structMyArgument.value)
+            myArg.userIndentLevel        = structMyArgument.value;
+            myArg.setIndentLevel         = 1;
+            arguments                    = structMyArgument.arguments;
+        end
+        
+        %%% setBulletType %%%
+        structMyArgument       = deleteFromArgumentAndGetValue(arguments,'bulletType');
+        if ~isempty(structMyArgument.value)
+            myArg.userBulletType         = structMyArgument.value;
+            myArg.setBulletType          = 1;
+            arguments                    = structMyArgument.arguments;
         end
         
         %%% setTable %%%
@@ -1481,6 +1535,7 @@ function myArg = getValuesFromArgument(myArg,arguments,out)
             arguments                  = structMyArgument.arguments;
             myArg.doSetTable           = 1;
             myArg.doSetTableS          = 1;
+            myArg.doColumnShape        = 0;
         end
         
         %%% setTable %%%

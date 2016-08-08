@@ -8,7 +8,7 @@ function desiredProperty = toPPT_conifg(identifierProperty)
     toPPTFigure.widthPercentageByUser    = 0;
     toPPTFigure.defaultheightPercentage  = 100; %in percent                 %% User can change value
     toPPTFigure.heightPercentageByUser   = 0;
-    toPPTFigure.stringPos                = 'C';                             %% User can change value
+    toPPTFigure.stringPos                = 'NW';                            %% User can change value
     toPPTFigure.defaultWidthDivideTile   = 50; %in percent                  %% User can change value
     toPPTFigure.defaultOuterGapTileN     = 110; %in px                      %% User can change value
     toPPTFigure.defaultOuterGapTileS     = 60; %in px                       %% User can change value
@@ -23,8 +23,8 @@ function desiredProperty = toPPT_conifg(identifierProperty)
     toPPTFigure.objectWidth              = [];
     toPPTFigure.defaultPosAnker          = 'C';                             %% User can change value
     toPPTFigure.posPercentageByUser      = 0;
-    toPPTFigure.defaultExportMode        = 'exportFig';                     %% User can change value => 'exportFig' or 'matlab'
-    toPPTFigure.defaultExportFormatType  = 'meta';                          %% User can change value => toPPTFigure.allowedExportFormatType
+    toPPTFigure.defaultExportMode        = 'matlab';                     %% User can change value => 'exportFig' or 'matlab'
+    toPPTFigure.defaultExportFormatType  = 'png';                          %% User can change value => toPPTFigure.allowedExportFormatType
     toPPTFigure.allowedExportFormatType    = {'jpeg','png','tiff','tiffn','meta','bmpmono','bmp','bmp16m','bmp256','hdf','pbm','pbmraw','pcxmono','pcx24b','pcx256','pcx16','pgm','pgmraw','ppm','ppmraw','clipboard'};
     toPPTFigure.allowedExportFormatTypeExt = {'.jpg','.png','.tif','.tif','.emf','.bmp','.bmp','.bmp','.bmp','.hdf','.pbm','.pbm','.pcx','.pcx','.pcx','.pcx','.pgm','.pgm','.ppm','.ppm',''};
     toPPTFigure.cleanUpTempImages          = 1;                             %% User can change value (If set to one temp Images will be deleted after inserting into ppt. If zero last image will be kept)
@@ -90,6 +90,7 @@ function desiredProperty = toPPT_conifg(identifierProperty)
     toPPTText.doSetTableS               = 0;
     toPPTText.addBulletPoints           = 1;
     toPPTText.addBulletNumbers          = 0;
+    toPPTText.setIndentLevel            = 0; %by default don't set bullet levels
     toPPTText.userHeight                = [];
     toPPTText.userLeft                  = [];
     toPPTText.userTop                   = [];
@@ -98,7 +99,9 @@ function desiredProperty = toPPT_conifg(identifierProperty)
     toPPTText.posPercentageByUser       = 0;
     toPPTText.userSection               = [];
     toPPTText.doAddSection              = 0;
-
+    toPPTText.setBulletType             = 0; %by default don't set the bullet type
+    toPPTText.doColumnShape             = 0;
+    toPPTText.doMergCells               = 0; %by default don't run a cell merge
     
     toPPTText.myPresentationHeight      = [];
     toPPTText.myPresentationWidth       = [];
