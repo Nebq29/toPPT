@@ -672,6 +672,7 @@ function setText(myArg,slide,myFormattedText)
                 end
             end
         end
+    end
     
     
     if myArg.addTextBoxFrame
