@@ -627,7 +627,7 @@ function setText(myArg,slide,myFormattedText)
     
     
     %Adding bullets - can be truned off if user does not want that
-     
+    
     if myArg.addBulletPoints
     %ItemsBulletedList
        
@@ -641,7 +641,37 @@ function setText(myArg,slide,myFormattedText)
             set(myNewTextBox.TextFrame.TextRange.ParagraphFormat.Bullet,'RelativeSize',1);%Working
             set(myNewTextBox.TextFrame.TextRange.ParagraphFormat.Bullet,'Type','ppBulletUnnumbered');%WorkingCircle
         end
-    end
+        %set the bullet indent level
+        if myArg.setIndentLevel
+            b = 1;
+            for a = 1:myNewTextBox.TextFrame.TextRange.Lines.Count
+                myNewTextBox.TextFrame.TextRange.Lines(a).IndentLevel = myArg.userIndentLevel(b);
+                if(find(int8(myNewTextBox.TextFrame.TextRange.Lines(a).Text)==13))
+                    b = b+1;
+                end
+            end
+        end
+        %set the bullet types
+        if myArg.setBulletType
+            b = 1;
+            for a = 1:myNewTextBox.TextFrame.TextRange.Lines.Count
+                if(myArg.userBulletType(b) == 0)
+                    myNewTextBox.TextFrame.TextRange.Lines(a).ParagraphFormat.Bullet.Type = 'ppBulletNone';
+                elseif(myArg.userBulletType(b) == 1)
+                    %1 is a -
+                    myNewTextBox.TextFrame.TextRange.Lines(a).ParagraphFormat.Bullet.Character = 45;
+                elseif(myArg.userBulletType(b) == 2)
+                    %2 is a dot
+                    myNewTextBox.TextFrame.TextRange.Lines(a).ParagraphFormat.Bullet.Character = 8226;
+                elseif(myArg.userBulletType(b) == 3)
+                    %3 is a box
+                    myNewTextBox.TextFrame.TextRange.Lines(a).ParagraphFormat.Bullet.Character = 9632;
+                end
+                if(find(int8(myNewTextBox.TextFrame.TextRange.Lines(a).Text)==13))
+                    b = b+1;
+                end
+            end
+        end
     
     
     if myArg.addTextBoxFrame
@@ -679,7 +709,7 @@ function myFormattedText = intperetHtml(myFormattedText,textRange,myArg)
     %knownSpecialCommandsAttributes = {{'s','color:','font-family:','font-size:'}}; % The first element of the structure is the known tag itsself without brackets
 
     isSpecialCommand = [0,0,0,1]; % Does the knowCommand has some special attributes?
-    knownSpecialCommandsAttributes = {{'s','bg:','color:','font-family:','font-size:'}}; % The first element of the structure is the known tag itsself without brackets
+    knownSpecialCommandsAttributes = {{'s','bg:','color:','font-family:','font-size:','href:'}}; % The first element of the structure is the known tag itsself without brackets
 
     bStart = cell(1,5);
     bStop = cell(1,5);
@@ -908,7 +938,13 @@ function assignStyleToTextElement(textRange,rangeStart,rangeStop,currentAttribut
                     try
                         set(textRange.Characters(rangeStart,rangeStop).Font,'Size',str2num(currentValue));
                     catch
-                        error(['An error occured when setting the Font-Family: ',currentValue,' / you just have to set a number no px or % is allowed']);
+                        error(['An error occured when setting the Font-Size: ',currentValue,' / you just have to set a number no px or % is allowed']);
+                    end
+                case 'href:'
+                    try
+                        textRange.Characters(rangeStart,rangeStop).ActionSettings.Item(1).Hyperlink.SubAddress=currentValue;
+                    catch
+                        error(['An error occured when setting the href: ',currentValue,' ']);
                     end
             end
         end
@@ -1050,6 +1086,28 @@ function setTable(myArg,slide)
             
         end
     end
+    
+    if(myArg.doColumnShape)
+       for a = 1:pptTableObject.colCount
+           myNewTable.Table.Columns.Item(a).Width = myArg.userWidth*myArg.stringCol(a)/100;
+       end
+    end
+    
+    if(myArg.doMergCells && iscell(myArg.userMergeCells))
+        for a = 1:length(myArg.userMergeCells)
+            if(myArg.userMergeCells{a}(1) ~= myArg.userMergeCells{a}(2) ||...
+                    myArg.userMergeCells{a}(3) ~= myArg.userMergeCells{a}(4))
+                myNewTable.Table.Cell(myArg.userMergeCells{a}(1),myArg.userMergeCells{a}(3)).Merge(...
+                    myNewTable.Table.Cell(myArg.userMergeCells{a}(2),myArg.userMergeCells{a}(4)));
+            end
+        end
+    elseif(myArg.doMergCells && sum(size(myArg.userMergeCells) == [2,2])==2)
+        if(myArg.userMergeCells(1) ~= myArg.userMergeCells(2) || myArg.userMergeCells(3) ~= myArg.userMergeCells(4))
+            myNewTable.Table.Cell(myArg.userMergeCells(1),myArg.userMergeCells(3)).Merge(...
+                myNewTable.Table.Cell(myArg.userMergeCells(2),myArg.userMergeCells(4)));
+        end
+    end
+        
     
 end
 

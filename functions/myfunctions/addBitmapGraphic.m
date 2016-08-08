@@ -118,6 +118,7 @@ if strcmp(exportMode,'matlab')
             choosenExportExt    = myArg.allowedExportFormatTypeExt{indexAllowedFormat};
         
             pathImage = fullfile(pwd, ['pptfig',choosenExportExt]);
+            myFigure.PaperPositionMode = 'auto';
             print(myFigure, ['-d',choosenExportFormat], pathImage); 
 
             imagePath = pathImage;
