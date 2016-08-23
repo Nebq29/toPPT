@@ -15,7 +15,8 @@ classdef toPPT < handle
         end
         
         function Open(ppt, file)
-            %Opens an existing PPT
+            %% Open(file)
+            % Opens an existing power point presentation file.
             try
                 ppt.activeXCom.Presentations.Open(file);
                 ppt.presentation = wordClass.activeXCom.ActivePresentation;
@@ -25,7 +26,9 @@ classdef toPPT < handle
         end
         
         function NewTemplate(ppt)
-            %Opens the existing template
+            %% NewTemplate
+            % Creates a new power point presentation from the Template.pptx
+            % file in the toPPT class folder
             try
                 out = which('toPPT');
                 out = out(1:find(out == '\',1,'last'));
@@ -37,12 +40,58 @@ classdef toPPT < handle
         end
         
         function New(ppt)
-            %Creates a new blank document
+            %% New
+            % Creates a new blank power point presentation
             try
                 ppt.presentation = ppt.activeXCom.Presentation.Add;
             catch
                 error('unable to open new document')
             end
+        end
+        
+        function addSection(ppt, SectionTitle)
+            %% addSection(SectionTitle)
+            % adds a new section title to the presentation before the
+            % current slide
+            
+            try
+                %assume last slide is current slide for now
+                ppt.presentation.SectionProperties.AddSection(...
+                    ppt.presentation.Slides.Count,SectionTitle)
+            catch
+                error('Slide title was not valid')
+            end
+        end
+        
+        function addText(ppt, text, varargin)
+            %% addText(text, varargin)
+            % text is the text to be generated, using css tags such as
+            % <s font-family:Times New Roman> text </s>
+            % <s font-size:22> text </s>
+            % <s font-family:Times New Roman;font-size:22> text </s>
+            % all allowable tags:
+            % bg: red, blue, green, orange, purple... 
+            %       <a href="matlab:help rgb">additional colors</a>
+            % font-family: Times New Roman, Ariel, Comis Sans MS
+            %       any allowable font names
+            % font-size: 1 to 100
+            % href: link value (255,@,slide#)
+            %
+            % additioanl tags that can be used:
+            % <b> </b> to bold text
+            % <u> </u> to underline text
+            % <i> </i> to italicize text
+            %
+            % Allowable additional variables to pass in
+            % Location - [x%,y%] where this is from the NW corner of the
+            %   slide, defaults to [5, 20]
+            % Size - [x%,y%] gives the size of the text box to be created
+            %   defaults to [90, 50]
+            % Bullets - can be used to give each line of text a bullet,
+            %   needs to be a character. Defaults to no bullets.
+            % Indent - can be used to indent the line of text to be paired
+            %   with Bullets
+            
         end
         
     end
