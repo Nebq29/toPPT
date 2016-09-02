@@ -5,6 +5,7 @@ classdef toPPT < handle
     properties (Hidden)
         activeXCom = [];
         presentation = [];
+        currentSlide = [];
     end
     
     methods
@@ -60,6 +61,28 @@ classdef toPPT < handle
                     ppt.presentation.Slides.Count,SectionTitle)
             catch
                 error('Slide title was not valid')
+            end
+        end
+        
+        function newSlide(ppt,slideIndex)
+            %% newSlide(slideIndex)
+            % adds a new slide to the power point presentation
+            %if slideIndex is empty, will add to the end of the
+            %presentation, if slideIndex is not will add it there
+            
+            try
+                if(nargin < 2)
+                    %note:CustomLayouts.Item(11) is the "first" slide in
+                    %the slide master layout, 1 is a title slide.  Should
+                    %enable selection of the slide at some point
+                    ppt.currentSlide = ppt.presentation.Slides.AddSlide(ppt.presentation.Slides.Count+1,...
+                        ppt.presentation.SlideMaster.CustomLayouts.Item(11));
+                else
+                    ppt.currentSlide = ppt.presentation.Slides.AddSlide(slideIndex,...
+                        ppt.presentation.SlideMaster.CustomLayouts.Item(11));
+                end
+            catch
+                error('adding slide failed')
             end
         end
         
