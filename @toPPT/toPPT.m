@@ -15,7 +15,7 @@ classdef toPPT < handle
             ppt.activeXCom = actxserver('PowerPoint.Application');
         end
         
-        function Open(ppt, file)
+        function open(ppt, file)
             %% Open(file)
             % Opens an existing power point presentation file.
             try
@@ -26,8 +26,8 @@ classdef toPPT < handle
             end
         end
         
-        function NewTemplate(ppt)
-            %% NewTemplate
+        function newTemplate(ppt)
+            %% newTemplate
             % Creates a new power point presentation from the Template.pptx
             % file in the toPPT class folder
             try
@@ -40,8 +40,8 @@ classdef toPPT < handle
             end
         end
         
-        function New(ppt)
-            %% New
+        function new(ppt)
+            %% new
             % Creates a new blank power point presentation
             try
                 ppt.presentation = ppt.activeXCom.Presentation.Add;
@@ -72,14 +72,14 @@ classdef toPPT < handle
             
             try
                 if(nargin < 2)
-                    %note:CustomLayouts.Item(11) is the "first" slide in
+                    %note:CustomLayouts.Item(6) is the "blank" slide in
                     %the slide master layout, 1 is a title slide.  Should
                     %enable selection of the slide at some point
                     ppt.currentSlide = ppt.presentation.Slides.AddSlide(ppt.presentation.Slides.Count+1,...
-                        ppt.presentation.SlideMaster.CustomLayouts.Item(5));
+                        ppt.presentation.SlideMaster.CustomLayouts.Item(6));
                 else
                     ppt.currentSlide = ppt.presentation.Slides.AddSlide(slideIndex,...
-                        ppt.presentation.SlideMaster.CustomLayouts.Item(5));
+                        ppt.presentation.SlideMaster.CustomLayouts.Item(6));
                 end
             catch
                 error('adding slide failed')
