@@ -57,8 +57,8 @@ classdef toPPT < handle
             
             try
                 %assume last slide is current slide for now
-                ppt.presentation.SectionProperties.AddSection(...
-                    ppt.presentation.Slides.Count,SectionTitle)
+                ppt.presentation.SectionProperties.AddBeforeSlide(...
+                    ppt.presentation.Slides.Count,SectionTitle);
             catch
                 error('Slide title was not valid')
             end
@@ -344,6 +344,8 @@ classdef toPPT < handle
             %grab the last text if its not within a tag
             if(~isempty(tag_end) && (tag_end(end)+1 <= length(text)))
                 text_format(index_text).text = text(tag_end(end)+1:length(text));
+            elseif(isempty(tag_start) && isempty(tag_end))
+                text_format(index_text).text = text;
             else
                 text_format(index_text).text = '';
             end
