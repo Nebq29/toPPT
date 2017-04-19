@@ -1,5 +1,5 @@
 classdef toPPT < handle
-    %toWord Summary of this class goes here
+    %toPPT Summary of this class goes here
     %   Detailed explanation goes here
     
     properties (Hidden)
@@ -21,6 +21,9 @@ classdef toPPT < handle
             try
                 ppt.activeXCom.Presentations.Open(file);
                 ppt.presentation = wordClass.activeXCom.ActivePresentation;
+                ppt.currentSlide = ppt.presentation.Slides(ppt.presentation.Slides.Count);
+                %select the first slide to allow setting of the slide
+                ppt.currentSlide.Select;
             catch
                 error('Seems the file does not exist')
             end
@@ -35,6 +38,9 @@ classdef toPPT < handle
                 out = out(1:find(out == '\',1,'last'));
                 ppt.activeXCom.Presentations.Open([out 'Template.pptx']);
                 ppt.presentation = ppt.activeXCom.ActivePresentation;
+                ppt.currentSlide = ppt.presentation.Slides.Item(ppt.presentation.Slides.Count);
+                %select the first slide to allow setting of the slide
+                ppt.currentSlide.Select;
             catch
                 error('Seems the file does not exist')
             end
@@ -45,6 +51,7 @@ classdef toPPT < handle
             % Creates a new blank power point presentation
             try
                 ppt.presentation = ppt.activeXCom.Presentation.Add;
+                ppt.currentSlide = ppt.presentation.Slides.Item(ppt.presentation.Slides.Count);
             catch
                 error('unable to open new document')
             end
@@ -64,26 +71,105 @@ classdef toPPT < handle
             end
         end
         
+        function setTitle(ppt, Title)
+            %% setTitle(Title)
+            % sets the title of the current slide
+            if(ischar(Title))
+                try
+                    if(strcmp(ppt.currentSlide.Shapes.HasTitle,'msoFalse'))
+                        ppt.currentSlide.Shapes.AddTitle.TextFrame.TextRange.Text = Title;
+                    else
+                        ppt.currentSlide.Shapes.Title.TextFrame.TextRange.Text = Title;
+                    end
+                catch
+                    error('Adding slide title failed')
+                end
+            end
+        end
+        
         function newSlide(ppt,slideIndex)
             %% newSlide(slideIndex)
             % adds a new slide to the power point presentation
-            %if slideIndex is empty, will add to the end of the
-            %presentation, if slideIndex is not will add it there
+            % if slideIndex is empty, will add to the end of the
+            % presentation, if slideIndex is not will add it there
             
             try
                 if(nargin < 2)
                     %note:CustomLayouts.Item(6) is the "blank" slide in
                     %the slide master layout, 1 is a title slide.  Should
                     %enable selection of the slide at some point
-                    ppt.currentSlide = ppt.presentation.Slides.AddSlide(ppt.presentation.Slides.Count+1,...
-                        ppt.presentation.SlideMaster.CustomLayouts.Item(6));
+                    %ppt.currentSlide = ppt.presentation.Slides.AddSlide(ppt.presentation.Slides.Count+1,...
+                    %    ppt.presentation.SlideMaster.CustomLayouts.Item(11));
+                    ppt.currentSlide = invoke(ppt.presentation.Slides,'Add',...
+                        ppt.presentation.Slides.Count+1,11);
                 else
-                    ppt.currentSlide = ppt.presentation.Slides.AddSlide(slideIndex,...
-                        ppt.presentation.SlideMaster.CustomLayouts.Item(6));
+                    %ppt.currentSlide = ppt.presentation.Slides.AddSlide(slideIndex,...
+                    %    ppt.presentation.SlideMaster.CustomLayouts.Item(11));
+                    ppt.currentSlide = invoke(ppt.presentation.Slides,'Add',...
+                        slideIndex,11);
                 end
+                %select the first slide to allow setting of the slide
+                ppt.currentSlide.Select;
             catch
                 error('adding slide failed')
             end
+        end
+        
+        function selectSlide(ppt,slideIndex)
+            %% selectSlide(slideIndex)
+            % adds a new slide to the power point presentation
+            % if slideIndex is empty, will add to the end of the
+            % presentation, if slideIndex is not will add it there
+            
+            try
+                ppt.currentSlide = ppt.presentation.Slides.Item(slideIndex);
+                %select the first slide to allow setting of the slide
+                ppt.currentSlide.Select;
+            catch
+                error('electing slide failed')
+            end
+        end
+        
+        function save(ppt,savePath,varargin)
+            %% save(savePath)
+            % saves current power point presentation to the path
+            % provided by savePath, can be an abosulte path or a relative
+            % path
+            %
+            % Allowable additional variables to pass in
+            % Password - 'password' can be used to add a password to the
+            %   power point presentation when saving
+            
+            password = '';
+            for a = 1:2:nargin-2
+                %case statement to parse out values
+                switch upper(varargin{a})
+                    case 'PASSWORD'
+                        password = varargin{a+1};
+                        if(~ischar(password))
+                            error('Password must be a character array')
+                        end
+                    otherwise
+                        warning('Invalid input detected')
+                end
+            end
+            try
+                %check ending of path provided for power point extention,
+                %add if doesn't exist
+                if(strcmpi(savePath(end-5:end),'.pptx'))
+                    ending = '';
+                else
+                    ending = '.pptx';
+                end
+                %if no password passed, save without password
+                if(~isempty(password))
+                    ppt.presentation.Password = password;
+                end
+                ppt.presentation.SaveAs([savePath ending]);
+            catch
+                error('Saving failed, check path provided')
+            end
+            
         end
         
     end

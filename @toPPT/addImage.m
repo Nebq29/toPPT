@@ -23,7 +23,7 @@ function addImage(ppt, fig, varargin)
         '.bmp','.bmp','.hdf','.pbm','.pbm','.pcx','.pcx','.pcx','.pcx','.pgm',...
         '.pgm','.pgm','.pgm','.eps','.eps','.eps','.eps','.emf','.svg','.ps',...
         '.ps','.ps','.ps'};
-
+    
     %set default values for function
     location = [5,25];
     boxSize = [90, 70];
