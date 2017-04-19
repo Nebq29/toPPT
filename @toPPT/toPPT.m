@@ -99,12 +99,12 @@ classdef toPPT < handle
                     %the slide master layout, 1 is a title slide.  Should
                     %enable selection of the slide at some point
                     %ppt.currentSlide = ppt.presentation.Slides.AddSlide(ppt.presentation.Slides.Count+1,...
-                    %    ppt.presentation.SlideMaster.CustomLayouts.Item(11));
+                    %    ppt.presentation.SlideMaster.CustomLayouts.Item(6));
                     ppt.currentSlide = invoke(ppt.presentation.Slides,'Add',...
                         ppt.presentation.Slides.Count+1,11);
                 else
                     %ppt.currentSlide = ppt.presentation.Slides.AddSlide(slideIndex,...
-                    %    ppt.presentation.SlideMaster.CustomLayouts.Item(11));
+                    %    ppt.presentation.SlideMaster.CustomLayouts.Item(6));
                     ppt.currentSlide = invoke(ppt.presentation.Slides,'Add',...
                         slideIndex,11);
                 end
