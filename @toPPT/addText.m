@@ -93,7 +93,7 @@ function addText(ppt, text, varargin)
     previousLineCount = 0;
     for a = 1:textLines
         %add the text to the box and format it correctly
-        ppt.addFormattedText(box.TextFrame.TextRange,text{a});
+        ppt.addFormattedText(box.TextFrame.TextRange,text{a},a==textLines);
         %set the bullet of the line
         if(setBullets)
             if(Bullets(a) == 0)

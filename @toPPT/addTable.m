@@ -40,11 +40,11 @@ function addTable(ppt, title, text, varargin)
     
     location = [5,25];
     %even spacing columns
-    columnarray= ones(1,col)*100/col;
+    columnarray= ones(1,cols)*100/cols;
     doMerge = 0;
     MergeArray = {};
     boxSize = [90, 70];
-    for a = 1:2:nargin-2
+    for a = 1:2:nargin-3
         %case statement to parse out values
         switch upper(varargin{a})
             case 'COLUMN'
@@ -88,7 +88,6 @@ function addTable(ppt, title, text, varargin)
         end
     end
     
-    
     %get the current slide shape to calculate the location and
     %width in points of the text box
     slideHeight = ppt.presentation.PageSetup.SlideHeight;
@@ -101,7 +100,7 @@ function addTable(ppt, title, text, varargin)
     
     %Set tiles in first row and size column widths
     for a = 1:cols
-        addFormattedText(box.Table.Cell(1,a).Shape.TextFrame.TextRange,title{a});
+        ppt.addFormattedText(box.Table.Cell(1,a).Shape.TextFrame.TextRange,title{a},1);
         %must be set in pixles because... reasons
         box.Table.Columns.Item(a).Width = slideWidth*boxSize(1)/100*columnarray(a)/100;
     end
@@ -109,20 +108,19 @@ function addTable(ppt, title, text, varargin)
     %go through each row and populate the cells
     for a = 1:rows
         for b = 1:cols
-            addFormattedText(box.Table.Cell(a+1,b).Shape.TextFrame.TextRange,text{a,b});
+            ppt.addFormattedText(box.Table.Cell(a+1,b).Shape.TextFrame.TextRange,text{a,b},1);
         end
     end
     
     try
         if(doMerge)
             for a = 1:length(MergeArray)
-                box.Table.Cell(MergeArray{a}(1,:)).Merge(...
-                    box.Table.Cell(MergeArray{a}(2,:)));
+                box.Table.Cell(MergeArray{a}(1,2),MergeArray{a}(1,1)).Merge(...
+                    box.Table.Cell(MergeArray{a}(2,2),MergeArray{a}(2,1)));
             end
         end
     catch
         error('Merging formatting failed')
     end
-    
     
 end

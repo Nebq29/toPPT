@@ -172,6 +172,12 @@ classdef toPPT < handle
             
         end
         
+        function close(ppt)
+            %% close
+            % closes the presentation
+            ppt.presentation.Close;
+        end
+        
     end
     
     methods(Hidden)
@@ -224,7 +230,7 @@ classdef toPPT < handle
             delete@handle(ppt);
         end
         
-        function addFormattedText(ppt, textRange, text)
+        function addFormattedText(ppt, textRange, text, suppres_newline)
             %% interprets the text and the new text to the slide
             
             %seperates out the special text from the rest
@@ -232,6 +238,9 @@ classdef toPPT < handle
             %finds the end to the text format
             [tag_type,tag_start,tag_end] = regexp(text,'<([\\//]*[buis])([a-zA-Z -;:0-9]*)>','tokens');
             
+            if(nargin < 4)
+                suppres_newline = 0;
+            end
             %[term_start_loc,term_end_loc] = regexp(text,'<[\\//]s>');
             %[bui_b,bui_b_start,bui_b_finish] = regexp(text,'(<[\\//][bui]>)','tokens');
             %[bui_e,bui_e_start,bui_e_finish] = regexp(text,'(<[bui]>)','tokens');
@@ -321,11 +330,15 @@ classdef toPPT < handle
                 text_format(index_text).text = '';
             end
             
-            %add on a newline character to the last non-empty text box
-            for a = 0:length(text_format)-1
-                if(~isempty(text_format(index_text-a).text) || a == length(text_format)-1)
-                    text_format(index_text-a).text = [text_format(index_text-a).text char(13)];
-                    break;
+            %desired to not add newlines to table, but to add them when
+            %making multiple lines for text
+            if(~suppres_newline)
+                %add on a newline character to the last non-empty text box
+                for a = 0:length(text_format)-1
+                    if(~isempty(text_format(index_text-a).text) || a == length(text_format)-1)
+                        text_format(index_text-a).text = [text_format(index_text-a).text char(13)];
+                        break;
+                    end
                 end
             end
             
