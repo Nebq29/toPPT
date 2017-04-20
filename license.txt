@@ -1,3 +1,4 @@
+Copyright (c) 2017, Ben Geiger
 Copyright (c) 2015, Jens Richter
 Copyright (c) 2009, Kristjan Jonasson
 Copyright (c) 2011, Dmitriy Aronov
