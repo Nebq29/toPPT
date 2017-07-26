@@ -68,7 +68,7 @@ function addImage(ppt, fig, varargin)
         pathImage = fullfile(tempdir, ['pptfig',format_ext]);
         fig.PaperPositionMode = 'auto';
         print(fig,['-d' format],pathImage);
-    elseif(ischar(fig) && exists(fig))
+    elseif(ischar(fig) && exist(fig,'file'))
         pathImage = fig;
     else
         error('Passed figure must be a valid file or figure handle')
