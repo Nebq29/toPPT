@@ -20,8 +20,8 @@ classdef toPPT < handle
             % Opens an existing power point presentation file.
             try
                 ppt.activeXCom.Presentations.Open(file);
-                ppt.presentation = wordClass.activeXCom.ActivePresentation;
-                ppt.currentSlide = ppt.presentation.Slides(ppt.presentation.Slides.Count);
+                ppt.presentation = ppt.activeXCom.ActivePresentation;
+                ppt.currentSlide = ppt.presentation.Slides.Item(ppt.presentation.Slides.Count);
                 %select the first slide to allow setting of the slide
                 ppt.currentSlide.Select;
             catch
@@ -126,7 +126,7 @@ classdef toPPT < handle
                 %select the first slide to allow setting of the slide
                 ppt.currentSlide.Select;
             catch
-                error('electing slide failed')
+                error('Selecting slide failed')
             end
         end
         
