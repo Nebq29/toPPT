@@ -87,7 +87,7 @@ function addText(ppt, text, varargin)
     slideWidth = ppt.presentation.PageSetup.SlideWidth;
 
     %Create the Textbox
-    box = ppt.presentation.Slides.Item(ppt.presentation.Slides.Count).Shapes.AddTextbox('msoTextOrientationHorizontal',...
+    box = ppt.presentation.Slides.Item(ppt.currentSlide.SlideNumber).Shapes.AddTextbox('msoTextOrientationHorizontal',...
         slideWidth*location(1)/100,slideHeight*location(2)/100,slideWidth*boxSize(1)/100,slideHeight*boxSize(2)/100);
 
     previousLineCount = 0;

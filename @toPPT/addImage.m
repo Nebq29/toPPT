@@ -26,7 +26,7 @@ function addImage(ppt, fig, varargin)
     
     %set default values for function
     location = [5,25];
-    boxSize = [90, 70];
+    boxSize = [90,70];
     format = 'png';
     format_ext = '.png';
     for a = 1:2:nargin-2
@@ -75,7 +75,7 @@ function addImage(ppt, fig, varargin)
     end
     
     %Create the Imagebox
-    img = ppt.presentation.Slides.Item(ppt.presentation.Slides.Count).Shapes.AddPicture(pathImage,'msoFalse','msoTrue',...
+    img = ppt.currentSlide.Shapes.AddPicture(pathImage,'msoFalse','msoTrue',...
         slideWidth*location(1)/100,slideHeight*location(2)/100,slideWidth*boxSize(1)/100,slideHeight*boxSize(2)/100);
     
     %send the image to the back

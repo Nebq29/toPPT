@@ -94,7 +94,7 @@ function addTable(ppt, title, text, varargin)
     slideWidth = ppt.presentation.PageSetup.SlideWidth;
 
     %Create the Textbox
-    box = ppt.presentation.Slides.Item(ppt.presentation.Slides.Count).Shapes.AddTable(...
+    box = ppt.currentSlide.Shapes.AddTable(...
         rows+1,cols,slideWidth*location(1)/100,slideHeight*location(2)/100,...
         slideWidth*boxSize(1)/100,slideHeight*boxSize(2)/100);
     
@@ -115,8 +115,11 @@ function addTable(ppt, title, text, varargin)
     try
         if(doMerge)
             for a = 1:length(MergeArray)
-                box.Table.Cell(MergeArray{a}(1,2),MergeArray{a}(1,1)).Merge(...
-                    box.Table.Cell(MergeArray{a}(2,2),MergeArray{a}(2,1)));
+                if((MergeArray{a}(1,1) ~= MergeArray{a}(2,1)) ||...
+                        (MergeArray{a}(1,2) ~= MergeArray{a}(2,2)))
+                    box.Table.Cell(MergeArray{a}(1,1),MergeArray{a}(1,2)).Merge(...
+                        box.Table.Cell(MergeArray{a}(2,1),MergeArray{a}(2,2)));
+                end
             end
         end
     catch
