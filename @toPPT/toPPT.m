@@ -299,7 +299,7 @@ classdef toPPT < handle
                     case 's'
                         index_text = index_text+1;
                         text_format(index_text) = text_format(referece_text);
-                        special_broken = regexp(tag_type{index_tag}{2},'([a-zA-Z-0-9]+):([",@a-zA-Z- 0-9:_.\\//%]+)[;]*','tokens');
+                        special_broken = regexp(tag_type{index_tag}{2},'([a-zA-Z-0-9]+):([#",@a-zA-Z- 0-9:_.\\//%]+)[;]*','tokens');
                         for b = 1:length(special_broken)
                             switch lower(special_broken{b}{1})
                                 case 'font-family'
@@ -385,6 +385,9 @@ classdef toPPT < handle
                         textRange.Characters(start_text,end_text).Font.Size = text_format(a).size;
                         %specify the font color
                         textRange.Characters(start_text,end_text).Font.Color.RGB = ppt.rgb(text_format(a).color,'ppt');
+                        if(~strcmpi(text_format(a).bg,'white'))
+                            textRange.Parent.Parent.Fill.ForeColor.RGB = ppt.rgb(text_format(a).bg,'ppt');
+                        end
                         %make characters underlined
                         if(text_format(a).underlined)
                             textRange.Characters(start_text,end_text).Font.Underline = 'msoTrue';
