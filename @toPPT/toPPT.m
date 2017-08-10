@@ -263,7 +263,7 @@ classdef toPPT < handle
             %[special,start_loc,end_loc] = regexp(text,'<s ([a-zA-Z-0-9]+:[a-zA-Z- 0-9]+[;]*)*>','tokens');
             %finds the end to the text format
             text = strrep(text,'–','-'); %catch the auto replaced - in ppt
-            [tag_type,tag_start,tag_end] = regexp(text,'<([\\//]*[buis])([a-zA-Z -;:0-9]*)>','tokens');
+            [tag_type,tag_start,tag_end] = regexp(text,'<([\\//]*[buis])([a-zA-Z -;:0-9_.//\\%]*)>','tokens');
             
             if(nargin < 4)
                 suppres_newline = 0;
@@ -278,6 +278,7 @@ classdef toPPT < handle
             text_format(1).bg = 'white';
             text_format(1).size = 20;
             text_format(1).href = '';
+            text_format(1).shref = '';
             text_format(1).bold = 0;
             text_format(1).underlined = 0;
             text_format(1).italicize = 0;
@@ -298,7 +299,7 @@ classdef toPPT < handle
                     case 's'
                         index_text = index_text+1;
                         text_format(index_text) = text_format(referece_text);
-                        special_broken = regexp(tag_type{index_tag}{2},'([a-zA-Z-0-9]+):([",@a-zA-Z- 0-9]+)[;]*','tokens');
+                        special_broken = regexp(tag_type{index_tag}{2},'([a-zA-Z-0-9]+):([",@a-zA-Z- 0-9:_.\\//%]+)[;]*','tokens');
                         for b = 1:length(special_broken)
                             switch lower(special_broken{b}{1})
                                 case 'font-family'
@@ -309,6 +310,8 @@ classdef toPPT < handle
                                     text_format(index_text).bg = special_broken{b}{2};
                                 case 'href'
                                     text_format(index_text).href = special_broken{b}{2};
+                                case 'shref'
+                                    text_format(index_text).shref = special_broken{b}{2};
                                 case 'color'
                                     text_format(index_text).color = special_broken{b}{2};
                                 otherwise
@@ -402,8 +405,11 @@ classdef toPPT < handle
                         end
                         %Add the href link
                         if(~isempty(text_format(a).href))
-                            textRange.Characters(start_text,end_text).ActionSettings.Item(1).Hyperlink.SubAddress = ...
+                            textRange.Characters(start_text,end_text).ActionSettings.Item(1).Hyperlink.Address = ...
                                 text_format(a).href;
+                        elseif(~isempty(text_format(a).shref))
+                            textRange.Characters(start_text,end_text).ActionSettings.Item(1).Hyperlink.SubAddress = ...
+                                text_format(a).shref;
                         end
                         
                     catch

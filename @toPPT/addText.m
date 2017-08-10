@@ -11,7 +11,8 @@ function addText(ppt, text, varargin)
     %       any allowable font names
     %   font-size: 1 to 100
     %   color: same allowable values as bg
-    %   href: link value (255,@,slide#)
+    %   shref: link value (255,@,slide#)
+    %   href: link value (http://www.google.com)
     %
     % additioanl tags that can be used:
     %   <b> </b> to bold text
@@ -98,7 +99,17 @@ function addText(ppt, text, varargin)
         if(setBullets)
             if(Bullets(a) == 0)
                 box.TextFrame.TextRange.Lines(previousLineCount+1).ParagraphFormat.Bullet.Type = 'ppBulletNone';
+            elseif(Bullets(a) == 1)
+                %1 is a -
+                box.TextFrame.TextRange.Lines(previousLineCount+1).ParagraphFormat.Bullet.Character = 45;
+            elseif(Bullets(a) == 2)
+                %2 is a dot
+                box.TextFrame.TextRange.Lines(previousLineCount+1).ParagraphFormat.Bullet.Character = 8226;
+            elseif(Bullets(a) == 3)
+                %3 is a box
+                box.TextFrame.TextRange.Lines(previousLineCount+1).ParagraphFormat.Bullet.Character = 9632;
             else
+                %everything else is just the character
                 box.TextFrame.TextRange.Lines(previousLineCount+1).ParagraphFormat.Bullet.Character = Bullets(a);
             end
         end
