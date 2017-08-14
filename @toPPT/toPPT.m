@@ -167,7 +167,7 @@ classdef toPPT < handle
             try
                 %check ending of path provided for power point extention,
                 %add if doesn't exist
-                if(strcmpi(savePath(end-5:end),'.pptx'))
+                if(strcmpi(savePath(end-4:end),'.pptx'))
                     ending = '';
                 else
                     ending = '.pptx';
