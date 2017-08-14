@@ -263,7 +263,7 @@ classdef toPPT < handle
             %[special,start_loc,end_loc] = regexp(text,'<s ([a-zA-Z-0-9]+:[a-zA-Z- 0-9]+[;]*)*>','tokens');
             %finds the end to the text format
             text = strrep(text,'–','-'); %catch the auto replaced - in ppt
-            [tag_type,tag_start,tag_end] = regexp(text,'<([\\//]*[buis])([a-zA-Z -;:0-9_.//\\%]*)>','tokens');
+            [tag_type,tag_start,tag_end] = regexp(text,'<([\\//]*[buis])([a-zA-Z -;:0-9_.//\\%#!"'']*)>','tokens');
             
             if(nargin < 4)
                 suppres_newline = 0;
@@ -299,7 +299,7 @@ classdef toPPT < handle
                     case 's'
                         index_text = index_text+1;
                         text_format(index_text) = text_format(referece_text);
-                        special_broken = regexp(tag_type{index_tag}{2},'([a-zA-Z-0-9]+):([#",@a-zA-Z- 0-9:_.\\//%]+)[;]*','tokens');
+                        special_broken = regexp(tag_type{index_tag}{2},'([a-zA-Z-0-9]+):([#!",@a-zA-Z- 0-9:_.\\//%'']+)[;]*','tokens');
                         for b = 1:length(special_broken)
                             switch lower(special_broken{b}{1})
                                 case 'font-family'
