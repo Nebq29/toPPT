@@ -247,12 +247,14 @@ classdef toPPT < handle
             end
         end
         
-        function [sections, slides] = getSlideSections(ppt)
+        function [sections, slides, start] = getSlideSections(ppt)
             slides = [];
             sections = {};
+            start = [];
             for a = 1:ppt.presentation.SectionProperties.Count
                 sections{a} = ppt.presentation.SectionProperties.Name(a);
                 slides(a) = ppt.presentation.SectionProperties.SlidesCount(a);
+                start(a) = ppt.presentation.SectionProperties.FirstSlide(a);
             end
         end
         
