@@ -90,7 +90,8 @@ function addText(ppt, text, varargin)
     %Create the Textbox
     box = ppt.presentation.Slides.Item(ppt.currentSlide.SlideNumber).Shapes.AddTextbox('msoTextOrientationHorizontal',...
         slideWidth*location(1)/100,slideHeight*location(2)/100,slideWidth*boxSize(1)/100,slideHeight*boxSize(2)/100);
-
+    box.TextFrame.WordWrap = 1;
+    
     previousLineCount = 0;
     for a = 1:textLines
         %add the text to the box and format it correctly

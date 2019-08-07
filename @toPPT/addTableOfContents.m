@@ -122,8 +122,10 @@ function addTableOfContents(ppt,h)
         ppt.presentation.Slides.Item(a).HeadersFooters.DateAndTime.Visible = 'msoTrue';
         ppt.presentation.Slides.Item(a).HeadersFooters.DateAndTime.Text = date;
         ppt.presentation.Slides.Item(a).HeadersFooters.SlideNumber.Visible = 'msoTrue';
-        ppt.presentation.Slides.Item(a).HeadersFooters.Footer.Visible = 'msoTrue';
-        ppt.presentation.Slides.Item(a).HeadersFooters.Footer.Text = part_title;
+        try
+            ppt.presentation.Slides.Item(a).HeadersFooters.Footer.Visible = 'msoTrue';
+            ppt.presentation.Slides.Item(a).HeadersFooters.Footer.Text = part_title;
+        end
     end
     
 
